@@ -1,6 +1,7 @@
+#include <array>
 #include <iostream>
-#include <cstring>
 #include <limits>
+#include <string>
 using namespace std;
 // TODO: Improve input validation for safety and security
 
@@ -8,18 +9,17 @@ class MediaSystem {
 private:
     bool powerOn;
     int currentSongIndex;
-    char songs[4][10];
+    array<string, 4> songs;
 
 public:
     MediaSystem() {
         powerOn = false;
         currentSongIndex = 0;
 
-
-        strcpy(songs[0], "SongA");
-        strcpy(songs[1], "SongB");
-        strcpy(songs[2], "SongC");
-        strcpy(songs[3], "SongD");
+        songs[0] = "SongA";
+        songs[1] = "SongB";
+        songs[2] = "SongC";
+        songs[3] = "SongD";
     }
 
     void togglePower() {
@@ -48,11 +48,18 @@ public:
             return;
         }
 
-        char newTitle[10];
+        string newTitle;
         cout << "Enter new title: ";
-        cin >> newTitle; 
-       
-        strcpy(songs[currentSongIndex], newTitle);
+        cin >> newTitle;
+
+        if (!cin) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid\n";
+            return;
+        }
+
+        songs[currentSongIndex] = newTitle;
         cout << "Renamed current song to " << songs[currentSongIndex] << endl;
     }
 };
