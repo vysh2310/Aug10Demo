@@ -2,7 +2,7 @@
 #include <cstring>
 #include <limits>
 using namespace std;
-// TODO: Improve input validation for safety
+// TODO: Improve input validation for safety and security
 
 class MediaSystem {
 private:
