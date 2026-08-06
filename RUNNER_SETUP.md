@@ -1,6 +1,6 @@
 # Self-Hosted Runner Setup
 
-This repository's PR gate requires a Windows self-hosted GitHub Actions runner with the label `Polyspace`.
+This repository's PR gate requires a Windows self-hosted GitHub Actions runner with the default labels `self-hosted`, `windows`, and `X64`.
 
 ## Required software
 
@@ -44,7 +44,7 @@ In GitHub:
 4. Choose `Windows`.
 5. Download and extract the runner.
 6. Run the GitHub-provided `config.cmd` command.
-7. Add the label `Polyspace` when prompted.
+7. You do not need a custom label for the current workflow. The default labels are enough.
 8. Install and start the runner service with the GitHub-provided `run.cmd` or service commands.
 
 ## Validate the runner
@@ -58,5 +58,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-runner-pr
 The PR workflow `Main Merge Gate` will only target runners labeled:
 
 ```text
-self-hosted, windows, Polyspace
+self-hosted, windows, X64
 ```
