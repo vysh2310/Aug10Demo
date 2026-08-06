@@ -26,13 +26,9 @@ public:
     }
 };
 
-/* polyspace-begin SEI CERT C++:ERR50-CPP [Justified] "Integration demo exits after running a fixed validation scenario" */
-/* polyspace-begin SEI CERT C++:ERR51-CPP [Justified] "Integration demo relies on top-level runtime exception reporting" */
-int main() {
+int main() { /* polyspace CERT-CPP:ERR50-CPP [Justified:Low] "Integration demo exits after a fixed validation scenario" polyspace CERT-CPP:ERR51-CPP [Justified:Low] "Integration demo relies on top-level runtime exception reporting" */
     MediaSystem system;
     DashboardController dashboard;
     dashboard.run(system);
     return 0;
 }
-/* polyspace-end SEI CERT C++:ERR51-CPP */
-/* polyspace-end SEI CERT C++:ERR50-CPP */

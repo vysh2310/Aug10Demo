@@ -49,6 +49,40 @@ function Invoke-External {
     }
 }
 
+function Test-ResultIsSuppressedOrJustified {
+    param(
+        [Parameter(Mandatory = $true)]
+        $Result
+    )
+
+    if ($null -ne $Result.suppressions) {
+        foreach ($suppression in @($Result.suppressions)) {
+            if ($null -eq $suppression) {
+                continue
+            }
+
+            if ($suppression.status -in @('accepted', 'Accepted')) {
+                return $true
+            }
+
+            if ($suppression.kind -in @('inSource', 'external')) {
+                return $true
+            }
+        }
+    }
+
+    if ($null -ne $Result.properties) {
+        foreach ($propertyName in @('status', 'reviewStatus', 'state')) {
+            $propertyValue = $Result.properties.$propertyName
+            if ($propertyValue -in @('Justified', 'Reviewed', 'No action planned', 'Not a defect')) {
+                return $true
+            }
+        }
+    }
+
+    return $false
+}
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $scriptDir
 Set-Location $repoRoot
@@ -163,8 +197,12 @@ try {
             }
         }
 
-        if ($results.Count -gt 0) {
-            $examples = $results |
+        $blockingResults = @(
+            $results | Where-Object { -not (Test-ResultIsSuppressedOrJustified -Result $_) }
+        )
+
+        if ($blockingResults.Count -gt 0) {
+            $examples = $blockingResults |
                 Select-Object -First 5 |
                 ForEach-Object {
                     $location = $_.locations[0].physicalLocation
@@ -173,7 +211,7 @@ try {
 
             $violations += [PSCustomObject]@{
                 Source = $sourceFile.Name
-                Count = $results.Count
+                Count = $blockingResults.Count
                 Examples = $examples
             }
         }

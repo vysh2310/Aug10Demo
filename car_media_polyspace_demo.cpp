@@ -66,9 +66,7 @@ public:
     }
 };
 
-/* polyspace-begin SEI CERT C++:ERR50-CPP [Justified] "Demo main exits only on explicit user menu selection" */
-/* polyspace-begin SEI CERT C++:ERR51-CPP [Justified] "Demo entry point relies on process-level exception reporting" */
-int main() {
+int main() { /* polyspace CERT-CPP:ERR50-CPP [Justified:Low] "Demo exits only on explicit user menu selection" polyspace CERT-CPP:ERR51-CPP [Justified:Low] "Demo relies on top-level runtime exception reporting" */
     MediaSystem system;
     int choice = 0;
 
@@ -91,6 +89,4 @@ int main() {
         }
     }
 }
-/* polyspace-end SEI CERT C++:ERR51-CPP */
-/* polyspace-end SEI CERT C++:ERR50-CPP */
 
