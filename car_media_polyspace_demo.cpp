@@ -3,7 +3,7 @@
 #include <limits>
 #include <string>
 using namespace std;
-// TODO: Improve input validation for safety and security
+// TODO: Improve input validation for safety and security features
 
 class MediaSystem {
 private:
@@ -36,6 +36,7 @@ public:
     }
 
     void nextSong() {
+
         if (!powerOn) return;
 
         currentSongIndex = (currentSongIndex + 1) % 4;
