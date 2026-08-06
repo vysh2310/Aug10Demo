@@ -19,9 +19,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate runner prerequisites
-        shell: powershell
-        run: .\scripts\validate-runner-prereqs.ps1
+        shell: cmd
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-runner-prereqs.ps1
 
       - name: Run merge gate
-        shell: powershell
-        run: .\scripts\run-main-merge-gate.ps1
+        shell: cmd
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-main-merge-gate.ps1
