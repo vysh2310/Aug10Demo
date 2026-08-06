@@ -66,6 +66,8 @@ public:
     }
 };
 
+/* polyspace-begin SEI CERT C++:ERR50-CPP [Justified] "Demo main exits only on explicit user menu selection" */
+/* polyspace-begin SEI CERT C++:ERR51-CPP [Justified] "Demo entry point relies on process-level exception reporting" */
 int main() {
     MediaSystem system;
     int choice = 0;
@@ -89,4 +91,6 @@ int main() {
         }
     }
 }
+/* polyspace-end SEI CERT C++:ERR51-CPP */
+/* polyspace-end SEI CERT C++:ERR50-CPP */
 
