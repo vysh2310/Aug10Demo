@@ -101,14 +101,21 @@ $pstunitRuntime = Join-Path $polyspaceRoot 'polyspace\pstest\pstunit\src\pstunit
 $gpp = Get-RequiredCommandPath -Names @('g++.exe', 'g++')
 $makeExe = Get-RequiredCommandPath -Names @('mingw32-make.exe', 'mingw32-make', 'make.exe', 'make')
 
-$testSource = Join-Path $repoRoot 'car_media_polyspace_demo_pstunit.cpp'
-if (-not (Test-Path $testSource)) {
-    throw "Missing PSTUnit test source: $testSource"
+$testSources = Get-ChildItem -Path $repoRoot -Filter '*_pstunit.cpp' -File | Sort-Object Name
+if ($testSources.Count -eq 0) {
+    throw "Missing PSTUnit test source matching *_pstunit.cpp in $repoRoot"
 }
+
+if ($testSources.Count -gt 1) {
+    $testSourceNames = $testSources | ForEach-Object { $_.Name }
+    throw ("Expected exactly one PSTUnit test source matching *_pstunit.cpp, found: {0}" -f ($testSourceNames -join ', '))
+}
+
+$testSource = $testSources[0].FullName
 
 $scratchRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('Aug10Demo_merge_gate_' + [System.Guid]::NewGuid().ToString('N'))
 $buildOptionsFile = Join-Path $scratchRoot 'polyspace_build_options.txt'
-$testExe = Join-Path $scratchRoot 'car_media_polyspace_demo_pstunit.exe'
+$testExe = Join-Path $scratchRoot (($testSources[0].BaseName) + '.exe')
 New-Item -ItemType Directory -Path $scratchRoot -Force | Out-Null
 
 try {
