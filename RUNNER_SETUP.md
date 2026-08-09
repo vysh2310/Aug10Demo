@@ -1,4 +1,4 @@
-# Self-Hosted Runner Setup
+.\# Self-Hosted Runner Setup
 
 This repository's PR gate requires a Windows self-hosted GitHub Actions runner with the default labels `self-hosted`, `windows`, and `X64`.
 
