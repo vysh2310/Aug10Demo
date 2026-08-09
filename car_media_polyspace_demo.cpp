@@ -1,26 +1,25 @@
-// Car Media Polyspace Demo
-#include <array>
 #include <iostream>
+#include <cstring>
 #include <limits>
-#include <string>
 using namespace std;
-// TODO: Improve input validation for safety and security features
+// TODO: Improve input validation for safety
 
 class MediaSystem {
 private:
     bool powerOn;
     int currentSongIndex;
-    array<string, 4> songs;
+    char songs[4][10];
 
 public:
     MediaSystem() {
         powerOn = false;
         currentSongIndex = 0;
 
-        songs[0] = "SongA";
-        songs[1] = "SongB";
-        songs[2] = "SongC";
-        songs[3] = "SongD";
+
+        strcpy(songs[0], "SongA");
+        strcpy(songs[1], "SongB");
+        strcpy(songs[2], "SongC");
+        strcpy(songs[3], "SongD");
     }
 
     void togglePower() {
@@ -37,7 +36,6 @@ public:
     }
 
     void nextSong() {
-
         if (!powerOn) return;
 
         currentSongIndex = (currentSongIndex + 1) % 4;
@@ -50,23 +48,16 @@ public:
             return;
         }
 
-        string newTitle;
+        char newTitle[10];
         cout << "Enter new title: ";
-        cin >> newTitle;
-
-        if (!cin) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid\n";
-            return;
-        }
-
-        songs[currentSongIndex] = newTitle;
+        cin >> newTitle; 
+       
+        strcpy(songs[currentSongIndex], newTitle);
         cout << "Renamed current song to " << songs[currentSongIndex] << endl;
     }
 };
 
-int main() { /* polyspace CERT-CPP:ERR50-CPP [Justified:Low] "Demo exits only on explicit user menu selection" polyspace CERT-CPP:ERR51-CPP [Justified:Low] "Demo relies on top-level runtime exception reporting" */
+int main() {
     MediaSystem system;
     int choice = 0;
 
@@ -89,4 +80,3 @@ int main() { /* polyspace CERT-CPP:ERR50-CPP [Justified:Low] "Demo exits only on
         }
     }
 }
-

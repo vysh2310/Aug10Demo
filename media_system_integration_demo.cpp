@@ -26,7 +26,7 @@ public:
     }
 };
 
-int main() { /* polyspace CERT-CPP:ERR50-CPP [Justified:Low] "Integration demo exits after a fixed validation scenario" polyspace CERT-CPP:ERR51-CPP [Justified:Low] "Integration demo relies on top-level runtime exception reporting" */
+int main() {
     MediaSystem system;
     DashboardController dashboard;
     dashboard.run(system);
