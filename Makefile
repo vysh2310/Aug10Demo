@@ -2,7 +2,7 @@ CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2
 
 BIN_DIR := bin
-SRCS := $(filter-out car_media_polyspace_demo_pstunit.cpp,$(wildcard *.cpp))
+SRCS := $(filter-out %_pstunit.cpp,$(wildcard *.cpp))
 TARGETS := $(patsubst %.cpp,$(BIN_DIR)/%,$(SRCS))
 
 all: $(TARGETS)

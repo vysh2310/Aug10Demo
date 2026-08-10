@@ -2,7 +2,7 @@
 #include <cstring>
 #include <limits>
 using namespace std;
-// TODO: Improve input validation for safety
+// TODO: Improve input validation for safety 
 
 class MediaSystem {
 private:
@@ -50,7 +50,7 @@ public:
 
         char newTitle[10];
         cout << "Enter new title: ";
-        cin >> newTitle; 
+        cin >> newTitle;  
        
         strcpy(songs[currentSongIndex], newTitle);
         cout << "Renamed current song to " << songs[currentSongIndex] << endl;
@@ -80,4 +80,3 @@ int main() {
         }
     }
 }
-
