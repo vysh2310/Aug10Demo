@@ -20,9 +20,14 @@ class ScopedIoRedirect {
 public:
     ScopedIoRedirect()
         : originalCin_(std::cin.rdbuf(input_.rdbuf())),
-          originalCout_(std::cout.rdbuf(output_.rdbuf())) {}
+          originalCout_(std::cout.rdbuf(output_.rdbuf())) {
+        std::cin.clear();
+        std::cout.clear();
+    }
 
     ~ScopedIoRedirect() {
+        std::cin.clear();
+        std::cout.clear();
         std::cin.rdbuf(originalCin_);
         std::cout.rdbuf(originalCout_);
     }
@@ -205,6 +210,41 @@ PST_TEST(aug10demo_media_system, rename_song_updates_current_track) {
     // Verify the rename is acknowledged and the new title is active.
     PST_VERIFY_TRUE(io.output().find("Renamed current song to JazzMix\n") != std::string::npos);
     PST_VERIFY_TRUE(io.output().find("Playing: JazzMix\n") != std::string::npos);
+}
+
+/* Test: main retries after invalid input and exits cleanly when 5 is entered. */
+PST_TEST(aug10demo_media_system, main_reprompts_after_invalid_input_then_exits) {
+    // Set up scripted console input and capture the full user-visible session.
+    ScopedIoRedirect io;
+    io.setInput("oops\n5\n");
+
+    // Run the interactive entry point with invalid input followed by Exit.
+    const int result = media_core_standalone_main();
+
+    // Verify the program recovers, reports the invalid entry, and returns success.
+    const std::string captured = io.output();
+    PST_VERIFY_EQ(result, 0);
+    PST_VERIFY_TRUE(captured.find("Invalid\n") != std::string::npos);
+    PST_VERIFY_EQ(countOccurrences(captured, "1.Power 2.Play 3.Next 4.Rename 5.Exit"), static_cast<std::size_t>(2));
+}
+
+/* Test: main executes a nominal user flow through power, play, next, rename, and exit. */
+PST_TEST(aug10demo_media_system, main_runs_nominal_user_session) {
+    // Set up scripted console input and capture the full user-visible session.
+    ScopedIoRedirect io;
+    io.setInput("1\n2\n3\n4\nRoadMix\n2\n5\n");
+
+    // Run the interactive entry point through the main user actions.
+    const int result = media_core_standalone_main();
+
+    // Verify each command leaves the expected observable trace and exits successfully.
+    const std::string captured = io.output();
+    PST_VERIFY_EQ(result, 0);
+    PST_VERIFY_TRUE(captured.find("System ON\n") != std::string::npos);
+    PST_VERIFY_TRUE(captured.find("Playing: SongA\n") != std::string::npos);
+    PST_VERIFY_TRUE(captured.find("Playing: SongB\n") != std::string::npos);
+    PST_VERIFY_TRUE(captured.find("Renamed current song to RoadMix\n") != std::string::npos);
+    PST_VERIFY_TRUE(captured.find("Playing: RoadMix\n") != std::string::npos);
 }
 
 PST_SUITE(aug10demo_dashboard);
